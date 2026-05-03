@@ -51,6 +51,62 @@
     section { padding: 4rem 0; }
     @media (max-width: 768px) { section { padding: 3rem 0; } }
 
+    /* ===== PRE-INTRO SCREEN ===== */
+    #pre-intro-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 248, 250, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 3000; /* Nằm trên cùng */
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .pre-intro-box {
+      background: #ffffff; padding: 2.5rem 2rem; border-radius: 20px;
+      text-align: center; max-width: 400px; width: 90%;
+      box-shadow: 0 15px 40px rgba(255, 152, 183, 0.2);
+      animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, floatBox 3s ease-in-out infinite 0.6s;
+    }
+    .cute-icon { 
+      font-size: 4rem; margin-bottom: 1rem; 
+      animation: floatIcon 3s ease-in-out infinite; 
+    }
+    .pre-intro-box h2 { 
+      font-size: 1.5rem; color: #FF69B4; margin-bottom: 1rem; 
+    }
+    .pre-intro-box p { 
+      color: #5a5a5a; font-size: 1rem; margin-bottom: 2rem; line-height: 1.6; 
+    }
+    .cute-btn {
+      background: linear-gradient(135deg, #FFB3C1 0%, #FF69B4 100%);
+      color: white; border: none; padding: 1rem 2rem; border-radius: 50px;
+      font-size: 1.1rem; font-family: "Montserrat", sans-serif; font-weight: bold; 
+      cursor: pointer; box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes floatBox { 
+  0%, 100% { transform: translateY(0); } 
+  50% { transform: translateY(-12px); } 
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0.6); }
+  70% { box-shadow: 0 0 0 15px rgba(255, 105, 180, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 105, 180, 0); }
+}
+    .cute-btn:hover { 
+      transform: scale(1.05); box-shadow: 0 10px 25px rgba(255, 105, 180, 0.5); animation: none;
+    }
+    
+    @keyframes popIn { 
+      0% { opacity: 0; transform: scale(0.8); } 
+      100% { opacity: 1; transform: scale(1); } 
+    }
+    @keyframes floatIcon { 
+      0%, 100% { transform: translateY(0); } 
+      50% { transform: translateY(-10px); } 
+    }
+
     /* ===== INTRO SCREEN ===== */
     #intro-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -131,8 +187,8 @@
       font-weight: 300; letter-spacing: 2px; text-transform: uppercase;
     }
     .hero__title { color: var(--text-dark); margin-bottom: 1.5rem; font-weight: 800; position: relative; display: inline-flex; align-items: center; justify-content: center; }
-    .title-name { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; }
-    .hero-name-target { position: relative; display: inline-flex; align-items: center; z-index: 1; color: var(--accent-pink); }
+    .title-name { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; color:(var(--pastel-pink)); }
+    .hero-name-target { position: relative; display: inline-flex; align-items: center; z-index: 1; color: (var(--pastel-pink)); }
     
     .birthday-hat-final {
       position: absolute; top: -35px; right: -25px; width: clamp(40px, 7vw, 60px); height: auto;
@@ -290,10 +346,51 @@
       .music-player-button { width: 50px; height: 50px; bottom: 1rem; right: 1rem; }
     }
     @media (max-width: 480px) { section { padding: 2.5rem 0; } .modal__content { padding: 1.5rem; } .cta-button { padding: 0.9rem 2rem; font-size: 0.95rem; } }
+  
+    /* Thêm overflow hidden để cánh hoa rơi không tạo thanh cuộn (scrollbar) */
+#pre-intro-screen {
+  overflow: hidden; 
+}
+
+/* ===== HIỆU ỨNG HOA ĐÀO RƠI CHUẨN ===== */
+.sakura-petal {
+  position: absolute;
+  top: -20px; /* Bắt đầu phía trên rìa màn hình */
+  background: linear-gradient(135deg, #ffb3c1, #ffebf0);
+  border-radius: 15px 2px 15px 2px;
+  box-shadow: 0 0 5px rgba(255, 179, 193, 0.4);
+  pointer-events: none;
+  z-index: 3001;
+  animation: sakuraFall linear infinite;
+}
+
+@keyframes sakuraFall {
+  0% { 
+    /* Bắt đầu từ vị trí top: -20px đã đặt ở trên */
+    transform: translateY(0) rotate(0deg); 
+    opacity: 0; 
+  }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { 
+    /* Rơi xuống vượt quá chiều cao màn hình (110vh) */
+    transform: translateY(110vh) translateX(var(--fall-x)) rotate(var(--fall-rot)); 
+    opacity: 0; 
+  }
+}
+
   </style>
 <base target="_blank">
 </head>
 <body>
+  <div id="pre-intro-screen">
+    <div class="pre-intro-box">
+      <div class="cute-icon">💌</div>
+      <h2>Hệ thống phát hiện...</h2>
+      <p>Một cô lớp trưởng siêu cấp đáng yêu đang truy cập! Nhớ bật âm thanh hoặc đeo tai nghe để trải nghiệm trọn vẹn món quà này nha. Tạm gác lại chuyện bài vở xíu nhé! ✨</p>
+      <button id="start-btn" class="cute-btn">Đồng ý nhận quà! 🎧💝</button>
+    </div>
+  </div>
   <!-- ===== INTRO SCREEN ===== -->
   <div id="intro-screen">
     <canvas id="matrix-canvas"></canvas>
@@ -305,7 +402,7 @@
   <div class="main-content" id="main-ui">
     <canvas id="particles-canvas"></canvas>
     <!-- Thêm autoplay để chạy tự động khi được tải -->
-    <audio id="background-music" preload="auto" autoplay loop></audio>
+    <audio id="background-music" preload="auto" loop></audio>
 
     <!-- Trang trí bằng ảnh (Dây cờ 2 bên và bong bóng) -->
     <img src="1.png" class="bunting-corner bunting-left" alt="Dây cờ trái" />
@@ -318,12 +415,12 @@
       <div class="hero__content">
         <p class="hero__subtitle">✨ Special Day ✨</p>
         <h1 class="hero__title">
-          Happy Birthday, 
-          <span class="title-name">
-            Cát <span class="hero-name-target">Tường</span>
-            <img src="hat.png" class="birthday-hat-final" alt="Mũ sinh nhật" />
-          </span>
-        </h1>
+  Happy Birthday, &nbsp;
+  <span class="title-name">
+    Cát <span class="hero-name-target">Tường</span>
+    <img src="hat.png" class="birthday-hat-final" alt="Mũ sinh nhật" />
+  </span>
+</h1>
         <p class="hero__description">Lớp trưởng gương mẫu</p>
         <button class="cta-button" id="wish-btn">Open My Wish 💝</button>
       </div>
@@ -408,7 +505,7 @@
         <h2 class="wish__title">Lời Chúc</h2>
         <div class="message-card wish__text">
           Chúc bà luôn nở nụ cười rạng rỡ, luôn tràn đầy năng lượng tích cực, và thành công
-          trong mọi điều mà bà theo đuổi. Cảm ơn vì đã là mảnh ghép "toả sáng nhất" để tạo ra tui của hiện tại.
+          trong mọi điều mà bà theo đuổi. Cảm ơn vì đã là mảnh ghép "toả sáng nhất" để tạo ra tui của hiện tại. 
           🌸✨
         </div>
       </div>
@@ -419,7 +516,7 @@
       <div class="modal__content message-card">
         <button class="modal__close" id="modal-close">&times;</button>
         <div class="modal__emoji">💌</div>
-        <h3 class="modal__title">Mở lời chúc</h3>
+        <h3 class="modal__title">Điều ước của Annn💐</h3>
         <div id="letter-content">
           <p>Gửi Tường,</p>
           <p style="margin-top: 1rem;">
@@ -433,7 +530,9 @@
           </p>
           <p style="margin-top: 1rem;">
             Tuổi 15 – cột mốc quan trọng nhất của tụi mình. Chúc Tường của tui luôn giữ được sự kiều diễm, dịu dàng và giọng nói ngọt ngào đó nhé. Chúc bà thi đỗ vào Châu Văn Liêm với số điểm thật cao như bà hằng mong muốn (hoặc là đổ chuyên nếu bà đổi ý sau khi đọc bức thư này=>>). Tui sẽ luôn ở đây, phía sau ủng hộ bà, dù là giải một bài toán khó hay cùng bà bước tiếp những năm tháng cấp 3 sắp tới.
-          </p>
+          </p>\
+          <p style="margin-top: 1rem;">
+            Cảm ơn vì đã là người bạn thân thiết nhất và có lẽ là 'người yêu' ngọt ngào nhất mà tui từng có. Tui hy vọng rằng mỗi ngày của bà sẽ tràn ngập niềm vui, tiếng cười và những điều tuyệt vời nhất. Và dù cho sau này chúng mình có đi đến đâu, thì trong tim tui, bà sẽ luôn là một phần quan trọng không thể thiếu. Hôm chụp kỷ yếu tụi mình làm 1 tấm thanh xuân vườn trường nha?
           <p style="margin-top: 1rem;">
             Sinh nhật thật vui vẻ và hạnh phúc nha, Bạn gái!
           </p>
@@ -482,8 +581,44 @@
   </div>
 
   <script>
+
   (function() {
     'use strict';
+// ===== HIỆU ỨNG HOA ĐÀO PRE-INTRO =====
+    function createSakura() {
+      const container = document.getElementById('pre-intro-screen');
+      if (!container) return;
+      
+      // Tạo ra 45 cánh hoa
+      for (let i = 0; i < 45; i++) {
+        let petal = document.createElement('div');
+        petal.className = 'sakura-petal';
+        
+        // Random kích thước cánh hoa từ 8px đến 16px
+        let size = Math.random() * 8 + 8; 
+        petal.style.width = size + 'px';
+        petal.style.height = size + 'px';
+        
+        // Random vị trí bắt đầu theo chiều ngang
+        petal.style.left = Math.random() * 100 + 'vw';
+        
+        // Random tốc độ rơi và thời gian chờ để hoa rơi tự nhiên, không cùng lúc
+        let fallDuration = Math.random() * 4 + 4; // Rơi trong 4s - 8s
+        let fallDelay = Math.random() * 5; // Chờ 0s - 5s trước khi rơi
+        
+        petal.style.animationDuration = fallDuration + 's';
+        petal.style.animationDelay = fallDelay + 's';
+        
+        // Random hướng gió thổi ngang và góc lộn vòng của cánh hoa
+        petal.style.setProperty('--fall-x', (Math.random() - 0.5) * 200 + 'px');
+        petal.style.setProperty('--fall-rot', Math.random() * 720 + 'deg');
+        
+        container.appendChild(petal);
+      }
+    }
+    
+    // Gọi hàm tạo hoa ngay khi script khởi chạy
+    createSakura();
 
     // ==================== CONFIG ====================
     const COLORS = {
@@ -873,16 +1008,40 @@
     // ==================== INIT ====================
     window.addEventListener('resize', () => { resizeMatrix(); resizePCanvas(); });
 
-    if (document.fonts) {
-      async function start() {
+   // ==================== KHỞI ĐỘNG SAU KHI CLICK ====================
+    window.addEventListener('resize', () => { resizeMatrix(); resizePCanvas(); });
+
+    const preIntro = document.getElementById('pre-intro-screen');
+    const startBtn = document.getElementById('start-btn');
+
+    startBtn.addEventListener('click', async () => {
+      // 1. Kích hoạt phát nhạc ngay lập tức
+      const audio = document.getElementById("background-music");
+      if (audio) {
+        audio.volume = 0.5;
+        audio.play().catch(e => console.log("Lỗi phát nhạc:", e));
+        isPlaying = true;
+        if (playPauseBtn) playPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        startRotation();
+      }
+
+      // 2. Làm mờ và ẩn màn hình Pre-intro
+      preIntro.style.opacity = '0';
+      setTimeout(() => { preIntro.style.display = 'none'; }, 800);
+
+      // 3. Khởi chạy Matrix & Particles
+      if (document.fonts) {
         await document.fonts.ready;
         await new Promise(r => setTimeout(r, 300));
         runSequence();
+      } else {
+        runSequence();
       }
-      start();
-    } else {
-      window.addEventListener('load', runSequence);
-    }
+    });
+
+    // Bỏ cái tự động play cũ tránh xung đột
+    // Xóa dòng: window.addEventListener("load", () => { attemptAutoPlay(); });
+    // Xóa dòng: document.body.addEventListener('click', () => { ... }, { once: true });
   })();
   </script>
 </body>
