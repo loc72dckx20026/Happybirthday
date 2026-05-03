@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Chúc mừng sinh nhật Cát Tường - Happy Birthday" />
+  <meta property="og:title" content="Happy Birthday, Cát Tường 🎂" />
+  <meta property="og:description" content="My Sunshine since Grade 2 - 10 years of beautiful memories" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#FFD1DC" />
+  <title>Happy Birthday, Cát Tường ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Montserrat:wght@300;400;500;600;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --white: #ffffff;
+      --pastel-pink: #ffd1dc;
+      --light-peach: #ffe5d1;
+      --rose-soft: #ffb3c1;
+      --text-dark: #5a5a5a;
+      --text-light: #888888;
+      --accent-pink: #ff97b7;
+      --bg-subtle: #fff8fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Montserrat", sans-serif;
+      background: linear-gradient(135deg, var(--white) 0%, var(--bg-subtle) 100%);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    h1, h2, h3 {
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    h1 { font-size: clamp(2.5rem, 8vw, 4rem); line-height: 1.2; }
+    h2 { font-size: clamp(1.8rem, 5vw, 2.5rem); }
+    h3 { font-size: clamp(1.3rem, 4vw, 1.8rem); }
+    p { font-weight: 300; color: var(--text-light); font-size: clamp(0.95rem, 2vw, 1.1rem); }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-subtle); }
+    ::-webkit-scrollbar-thumb { background: var(--pastel-pink); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--rose-soft); }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 4rem 0; }
+    @media (max-width: 768px) { section { padding: 3rem 0; } }
+
+    /* ===== INTRO SCREEN ===== */
+    #intro-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #000; z-index: 2000; overflow: hidden;
+      transition: opacity 1.2s ease;
+    }
+    #matrix-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+    #particle-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; }
+    #heart-container {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 3; pointer-events: none; overflow: hidden;
+    }
+    .heart-float {
+      position: absolute; bottom: -40px; font-size: 20px; opacity: 0;
+      animation: heartFloat linear forwards; pointer-events: none;
+      will-change: transform, opacity; filter: drop-shadow(0 0 6px currentColor);
+    }
+    @keyframes heartFloat {
+      0% { transform: translateY(0) translateX(0) scale(0.5) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.85; transform: translateY(-10vh) translateX(8px) scale(1) rotate(5deg); }
+      30% { transform: translateY(-30vh) translateX(-15px) scale(1.1) rotate(-8deg); opacity: 0.9; }
+      50% { transform: translateY(-50vh) translateX(20px) scale(0.95) rotate(6deg); opacity: 0.75; }
+      70% { transform: translateY(-70vh) translateX(-10px) scale(1.05) rotate(-4deg); opacity: 0.55; }
+      90% { transform: translateY(-90vh) translateX(5px) scale(0.9) rotate(3deg); opacity: 0.25; }
+      100% { transform: translateY(-110vh) translateX(0) scale(0.6) rotate(0deg); opacity: 0; }
+    }
+    .main-content { opacity: 0; transition: opacity 1s ease; position: relative; z-index: 1; }
+    .main-content.show { opacity: 1; }
+
+    /* ===== TRANG TRÍ & ANIMATION MORPH ===== */
+    .bunting-corner {
+      position: absolute;
+      width: clamp(120px, 20vw, 220px);
+      z-index: 10;
+      pointer-events: none;
+      transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+      opacity: 0;
+    }
+    .bunting-left { top: 0; left: 0; transform: translate(-100%, -100%) rotate(-15deg); }
+    .bunting-right { top: 0; right: 0; transform: translate(100%, -100%) rotate(15deg) scaleX(-1); }
+
+    .deco-balloon {
+      position: absolute;
+      width: clamp(70px, 10vw, 110px);
+      z-index: 9;
+      pointer-events: none;
+      transition: all 2.2s cubic-bezier(0.19, 1, 0.22, 1);
+      opacity: 0;
+    }
+    .balloon-left { left: 3%; top: 15%; transform: translateX(-200%) rotate(-20deg); }
+    .balloon-right { right: 3%; top: 20%; transform: translateX(200%) rotate(20deg); }
+
+    .main-content.show .bunting-left, 
+    .main-content.show .bunting-right,
+    .main-content.show .balloon-left,
+    .main-content.show .balloon-right {
+      opacity: 1;
+      transform: translate(0, 0) rotate(0deg);
+    }
+    .main-content.show .bunting-right { transform: translate(0, 0) rotate(0deg) scaleX(-1); }
+
+    @keyframes floatBalloonSimple {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    .main-content.show .balloon-left { animation: floatBalloonSimple 6s ease-in-out infinite 2s; }
+    .main-content.show .balloon-right { animation: floatBalloonSimple 7s ease-in-out infinite 2.2s reverse; }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--white) 0%, var(--light-peach) 50%, var(--bg-subtle) 100%);
+    }
+    .hero__content { position: relative; z-index: 10; animation: fadeInUp 1.2s ease-out 0.3s both; }
+    .hero__subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.2rem); color: var(--text-light); margin-bottom: 1rem;
+      font-weight: 300; letter-spacing: 2px; text-transform: uppercase;
+    }
+    .hero__title { color: var(--text-dark); margin-bottom: 1.5rem; font-weight: 800; position: relative; display: inline-flex; align-items: center; justify-content: center; }
+    .title-name { position: relative; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .hero-name-target { position: relative; display: inline-flex; align-items: center; z-index: 1; color: var(--accent-pink); }
+    
+    .birthday-hat-final {
+      position: absolute; top: -35px; right: -25px; width: clamp(40px, 7vw, 60px); height: auto;
+      transform: rotate(-30deg); z-index: 100; pointer-events: none;
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+    }
+
+    .hero__description {
+      font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--text-light); margin-bottom: 3rem;
+      max-width: 600px; margin-left: auto; margin-right: auto; font-weight: 300; line-height: 1.8;
+    }
+    .cta-button {
+      display: inline-block; padding: 1rem 2.5rem;
+      background: linear-gradient(135deg, var(--pastel-pink) 0%, var(--rose-soft) 100%);
+      color: var(--white); text-decoration: none; border: none; border-radius: 50px;
+      font-size: 1rem; font-family: "Montserrat", sans-serif; font-weight: 600;
+      cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(255, 152, 183, 0.3); position: relative; overflow: hidden;
+    }
+    .cta-button:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255, 152, 183, 0.5); }
+    .cta-button:active { transform: translateY(-1px); }
+    #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 1; }
+
+    /* ===== TIMELINE & MESSAGE CARD ===== */
+    .message-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        border-radius: 20px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-top: 20px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .message-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 40px 0 rgba(255, 152, 183, 0.2);
+    }
+    .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    .timeline__title { text-align: center; margin-bottom: 4rem; color: var(--text-dark); }
+    
+    .timeline-item {
+        padding: 20px;
+        border-left: 2px solid #ff7eb3;
+        position: relative;
+        margin-left: 20px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 0 15px 15px 0;
+        margin-bottom: 25px;
+        animation: fadeInUp 0.8s ease-out backwards;
+    }
+    .timeline-dot {
+        position: absolute;
+        left: -11px;
+        top: 25px;
+        width: 20px;
+        height: 20px;
+        background: #ff7eb3;
+        border-radius: 50%;
+        box-shadow: 0 0 15px #ff7eb3;
+        transition: all 0.3s ease;
+    }
+    .timeline-item:hover .timeline-dot {
+        transform: scale(1.3);
+    }
+    .timeline__year { font-size: 1.5rem; font-weight: 700; color: var(--accent-pink); margin-bottom: 0.5rem; font-family: "Playfair Display", serif; }
+    .timeline__label { font-size: 1rem; color: var(--text-dark); font-weight: 600; margin-bottom: 0.5rem; }
+    .timeline__description { font-size: 0.95rem; color: var(--text-light); line-height: 1.6; }
+
+    /* ===== WISH ===== */
+    .wish { background: linear-gradient(135deg, var(--light-peach) 0%, var(--bg-subtle) 100%); text-align: center; }
+    .wish__title { margin-bottom: 2rem; color: var(--text-dark); }
+    .wish__text { max-width: 700px; margin: 0 auto 3rem; font-size: clamp(1rem, 2.5vw, 1.2rem); line-height: 1.8; color: var(--text-light); }
+
+    /* ===== MODAL ===== */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); backdrop-filter: blur(5px); animation: fadeIn 0.3s ease; }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal__content { background: var(--white); padding: 2.5rem; border-radius: 20px; max-width: 500px; width: 90%; max-height: 70vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); animation: slideUp 0.4s ease; position: relative; }
+    .modal__close { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 2rem; color: var(--text-light); cursor: pointer; transition: all 0.2s ease; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .modal__close:hover { background: var(--bg-subtle); color: var(--accent-pink); }
+    .modal__title { margin-bottom: 1.5rem; color: var(--text-dark); }
+    .modal__emoji { font-size: 3rem; margin-bottom: 1rem; display: inline-block; }
+    #letter-content { font-family: 'Playfair Display', serif; font-style: italic; line-height: 1.8; color: var(--text-light); font-size: 0.95rem; opacity: 0; animation: fadeInLetter 1.5s ease-out forwards; }
+    #letter-content p { margin-bottom: 1rem; }
+
+    /* ===== GLASSMORPHISM MUSIC PLAYER ===== */
+    .music-player-button {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; width: 56px; height: 56px;
+      background: linear-gradient(135deg, rgba(255, 179, 193, 0.9) 0%, rgba(255, 105, 180, 0.9) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+      box-shadow: 0 8px 32px rgba(255, 105, 180, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000;
+    }
+    .music-player-button:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 12px 40px rgba(255, 105, 180, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4); }
+    .music-player-button:active { transform: scale(0.95); }
+    .music-player-window {
+      position: fixed; bottom: 5.5rem; right: 1.5rem; width: 320px;
+      background: rgba(20, 20, 30, 0.75); border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      padding: 1.25rem; z-index: 1001; opacity: 0;
+      transform: scale(0.85) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none; color: white; overflow: hidden;
+    }
+    .music-player-window.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: all; }
+    .music-player-window::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 179, 193, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .player-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; position: relative; z-index: 2; }
+    .player-title { font-weight: 700; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255, 179, 193, 0.9); }
+    .player-close { background: rgba(255, 255, 255, 0.1); border: none; color: rgba(255, 255, 255, 0.7); font-size: 1.3rem; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; line-height: 1; }
+    .player-close:hover { background: rgba(255, 105, 180, 0.3); color: white; transform: rotate(90deg); }
+    .album-art-container { width: 180px; height: 180px; margin: 0 auto 1rem; position: relative; z-index: 2; }
+    .album-art { width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, rgba(255, 179, 193, 0.3), rgba(255, 105, 180, 0.2)); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; overflow: hidden; border: 3px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); transition: transform 0.3s ease; }
+    .album-art img { width: 100%; height: 100%; object-fit: cover; }
+    .album-art-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+    .song-info { margin-bottom: 1rem; text-align: center; position: relative; z-index: 2; }
+    .song-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: white; }
+    .artist-name { font-size: 0.8rem; opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: rgba(255, 255, 255, 0.8); }
+    .progress-container { margin-bottom: 1rem; position: relative; z-index: 2; }
+    .progress-bar { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.15); border-radius: 2px; cursor: pointer; margin-bottom: 0.5rem; overflow: hidden; position: relative; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #FFB3C1, #FF69B4); width: 0%; border-radius: 2px; transition: width 0.1s linear; position: relative; }
+    .progress-fill::after { content: ''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; background: white; border-radius: 50%; box-shadow: 0 0 10px rgba(255, 105, 180, 0.5); opacity: 0; transition: opacity 0.2s ease; }
+    .progress-bar:hover .progress-fill::after { opacity: 1; }
+    .time-info { display: flex; justify-content: space-between; font-size: 0.7rem; opacity: 0.6; color: rgba(255, 255, 255, 0.8); }
+    .controls { display: flex; justify-content: center; align-items: center; gap: 1.25rem; position: relative; z-index: 2; }
+    .control-btn { background: rgba(255, 255, 255, 0.08); border: none; color: rgba(255, 255, 255, 0.8); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .control-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.1); color: white; }
+    .control-btn:active { transform: scale(0.95); }
+    .control-btn svg { width: 18px; height: 18px; }
+    .control-btn.play-pause { background: linear-gradient(135deg, #FFB3C1, #FF69B4); color: white; width: 48px; height: 48px; box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4); }
+    .control-btn.play-pause:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6); }
+    .control-btn.play-pause svg { width: 22px; height: 22px; }
+
+    /* ===== KEYFRAMES ===== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInLetter { from { opacity: 0; } to { opacity: 1; } }
+    
+    @media (max-width: 768px) {
+      .container { padding: 0 1rem; } .hero__title { font-size: 2rem; } .wish { padding: 3rem 0; }
+      .music-player-window { width: 280px; right: 1rem; bottom: 5rem; }
+      .album-art-container { width: 150px; height: 150px; }
+      .music-player-button { width: 50px; height: 50px; bottom: 1rem; right: 1rem; }
+    }
+    @media (max-width: 480px) { section { padding: 2.5rem 0; } .modal__content { padding: 1.5rem; } .cta-button { padding: 0.9rem 2rem; font-size: 0.95rem; } }
+  </style>
+<base target="_blank">
+</head>
+<body>
+  <!-- ===== INTRO SCREEN ===== -->
+  <div id="intro-screen">
+    <canvas id="matrix-canvas"></canvas>
+    <canvas id="particle-canvas"></canvas>
+    <div id="heart-container"></div>
+  </div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-content" id="main-ui">
+    <canvas id="particles-canvas"></canvas>
+    <!-- Thêm autoplay để chạy tự động khi được tải -->
+    <audio id="background-music" preload="auto" autoplay loop></audio>
+
+    <!-- Trang trí bằng ảnh (Dây cờ 2 bên và bong bóng) -->
+    <img src="1.png" class="bunting-corner bunting-left" alt="Dây cờ trái" />
+    <img src="1.png" class="bunting-corner bunting-right" alt="Dây cờ phải" />
+    <img src="balloon1.png" class="deco-balloon balloon-left" alt="Bóng bay trái" />
+    <img src="balloon2.png" class="deco-balloon balloon-right" alt="Bóng bay phải" />
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero__content">
+        <p class="hero__subtitle">✨ Special Day ✨</p>
+        <h1 class="hero__title">
+          Happy Birthday, 
+          <span class="title-name">
+            Cát <span class="hero-name-target">Tường</span>
+            <img src="hat.png" class="birthday-hat-final" alt="Mũ sinh nhật" />
+          </span>
+        </h1>
+        <p class="hero__description">Lớp trưởng gương mẫu</p>
+        <button class="cta-button" id="wish-btn">Open My Wish 💝</button>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="timeline" id="timeline">
+      <div class="container">
+        <h2 class="timeline__title">Our Beautiful Journey</h2>
+        <div class="timeline">
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2016</div>
+            <div class="timeline__label">Lớp 1 - Lần đầu gặp bà</div>
+            <div class="timeline__description">
+              Nơi mà tất cả bắt đầu. Một cuộc gặp gỡ đẹp đẽ mà ta đều chưa bao giờ quên. Nhớ hồi đó ngồi kế bà nói chuyện trên trời dưới đất quá trời. Mà bà biết ấn tượng đầu tiên của tui với bà là gì k? Chắc dễ gì biết được, lúc mà lần đầu chuyển chổ xuống kế bà á tui thấy bà viết chữ đẹp dữ thần luôn xong kiểu tui bị sock á.
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2018</div>
+            <div class="timeline__label">Lớp 2 - Đồng diễn</div>
+            <div class="timeline__description">
+              Nhớ hồi lớp 2 tui cũng có tham gia mấy cái hoạt động nghệ thuật ó, nên cũng đi tập đồ rồi đi diễn chung dới bà nè nói chung lúc đó cũng duii mà lâu quá tr tui quên ròi.
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2022</div>
+            <div class="timeline__label">Lớp 5 - Nhiều kỷ niệm</div>
+            <div class="timeline__description">
+              Lúc mà lớp 5 tui thấy vừa bùn vừa vui. Vui là vì tiếp tục được ngồi gần bà, ngồi trước mặt bà nè nên tui cũng nói chuyện được với bà nhìu lắm. Thiệt tình hồi đó bà là idol của tui luônn á Tường, quá trời giải phong trào luôn đã z con Hoạt động đội quá trời tui bị ghen tị á. Lúc đó tui thấy tui như con kiến nhỏ xíu z á không có gì trong tay nên cũng hơi tự ti về bản thân lắm=))
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2022</div>
+            <div class="timeline__label">Lớp 5 - Tâm sự mỏng</div>
+            <div class="timeline__description">
+              Còn lên lớp 5 tui buồn á là tại mình sắp xa nhau ròi. Với lại hồi đó tui nghe dụ trường Đoàn Thị Điểm có lớp tiếng Pháp tiếng Trung á xong mẹ tui bắt tui đi tiếng Pháp còn bà thì đi lớp tiếng Trung á, lúc đó cũng hơi hụt hẫn xíu tại chắc chắn là k học chung lớp nữa. Nhưng mà có ai ngờ là dô lớp 6 tiếp tục chung lớp nữa đâu=))
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2022</div>
+            <div class="timeline__label">Lớp 6 - Khởi đầu mới quen thuộc</div>
+            <div class="timeline__description">
+              Lúc tui biết tui với bà chung lớp đó tui cũng dui lắm hào hứng vô cùng tính dô sớm dành chổ cho bà ngồi kế tui mà ai ngờ bà đi chung dới Quỳnh Anh nên lúc đó trời ơi bùn thiệt sự luon á chèn.
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2024</div>
+            <div class="timeline__label">Lớp 7 - Chuyến đi trải nghiệm đầu tiên</div>
+            <div class="timeline__description">
+              Lúc đi trải nghiệm chung á, không phải là tự nhiên tui ngồi kế thằng Khôi đâu à nha, cái này bà phải tự biết áaa.
+            </div>
+          </div>
+
+          <div class="timeline-item message-card">
+            <div class="timeline-dot"></div>
+            <div class="timeline__year">2024</div>
+            <div class="timeline__label">Lớp 9 - Bất ngờ siu to</div>
+            <div class="timeline__description">
+              Hồi sinh nhật tui thiệt ra bà là người đầu tiên tặng quà sinh nhật cho tui luôn. Nói thiệt chứ lúc đó tui còn quên hôm đó sinh nhật tui nữa, nên bà tặng quà cho tui tui mới nhớ ra "ồ hôm nay sinh nhật mình". Mà phải nói là bà làm bánh ngon dữ luôn áa, ước sau này có người làm bánh cho tui ăn quàiii.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- WISH (Footer part) -->
+    <section class="wish" id="wish">
+      <div class="container">
+        <h2 class="wish__title">Lời Chúc</h2>
+        <div class="message-card wish__text">
+          Chúc bà luôn nở nụ cười rạng rỡ, luôn tràn đầy năng lượng tích cực, và thành công
+          trong mọi điều mà bà theo đuổi. Cảm ơn vì đã là mảnh ghép "toả sáng nhất" để tạo ra tui của hiện tại.
+          🌸✨
+        </div>
+      </div>
+    </section>
+
+    <!-- MODAL -->
+    <div class="modal" id="wish-modal">
+      <div class="modal__content message-card">
+        <button class="modal__close" id="modal-close">&times;</button>
+        <div class="modal__emoji">💌</div>
+        <h3 class="modal__title">Mở lời chúc</h3>
+        <div id="letter-content">
+          <p>Gửi Tường,</p>
+          <p style="margin-top: 1rem;">
+            Chiếc đèn kia và cả cái web nhỏ nhắn này nữa... đều là những thứ tui đã dành rất nhiều đêm để chuẩn bị và tất nhiên là cái web này tui chỉ làm duy nhất dành cho bà thoi đóoo. Thú thật là đối với một đứa suốt ngày chỉ biết vùi đầu vào mấy dòng code hay mấy bài toán như tui, việc viết ra những lời này còn khó hơn cả việc giải câu c hình nữa. Nhưng vì là viết cho bà, nên tui muốn thử một lần gạt bỏ cái vẻ 'nhạt nhẻo' thường ngày để nói hết những gì tui nghĩ.
+          </p>
+          <p style="margin-top: 1rem;">
+            Tường nè, mười năm trôi qua nhanh thật bà nhỉ? Từ cái hồi mình còn là những đứa nhóc lớp 1 lóng ngóng ngồi cùng bàn, tui đã luôn thấy bà là một người rất đặc biệt. Thế giới ngoài kia thay đổi nhiều quá, bạn bè mỗi đứa một hướng, nhưng tui cảm thấy may mắn vì đến tận bây giờ, mỗi khi nhìn sang bên cạnh, tui vẫn thấy nụ cười của bà ở đó. Bà chính là một 'hằng số' đẹp nhất mà tui chưa bao giờ muốn giải mã sai trong cuộc đời mình.
+          </p>
+          <p style="margin-top: 1rem;">
+            Đối với tui, cái vẻ 'không một vết son phấn' của bà lúc học bài hay lúc cười nói mới là thứ tỏa sáng hơn bất cứ điều gì khác. Bà vốn dĩ đã là một 'nàng thơ' rồi, nên là nếu mà bức thư này bà đọc dưới cương vị chúng mình là người yêu của nhau á thì có lẽ An chính là người hạnh phúc nhất thế gian này ròii.
+          </p>
+          <p style="margin-top: 1rem;">
+            Tuổi 15 – cột mốc quan trọng nhất của tụi mình. Chúc Tường của tui luôn giữ được sự kiều diễm, dịu dàng và giọng nói ngọt ngào đó nhé. Chúc bà thi đỗ vào Châu Văn Liêm với số điểm thật cao như bà hằng mong muốn (hoặc là đổ chuyên nếu bà đổi ý sau khi đọc bức thư này=>>). Tui sẽ luôn ở đây, phía sau ủng hộ bà, dù là giải một bài toán khó hay cùng bà bước tiếp những năm tháng cấp 3 sắp tới.
+          </p>
+          <p style="margin-top: 1rem;">
+            Sinh nhật thật vui vẻ và hạnh phúc nha, Bạn gái!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MUSIC PLAYER -->
+    <button class="music-player-button" id="music-btn" title="Open Music Player">🎵</button>
+    <div class="music-player-window" id="music-player">
+      <div class="player-header">
+        <div class="player-title">Now Playing</div>
+        <button class="player-close" id="close-player">&times;</button>
+      </div>
+      <div class="album-art-container">
+        <div class="album-art" id="album-art">
+          <img src="" alt="Album Art" id="album-img" style="display: none;">
+          <div class="album-art-placeholder" id="album-placeholder">🎵</div>
+        </div>
+      </div>
+      <div class="song-info">
+        <div class="song-name" id="song-name">Happy Birthday</div>
+        <div class="artist-name" id="artist-name">Special Mix</div>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="time-info">
+          <span id="current-time">0:00</span>
+          <span id="duration-time">3:58</span>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="control-btn" id="prev-btn" title="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+        <button class="control-btn play-pause" id="play-pause-btn" title="Play/Pause">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="control-btn" id="next-btn" title="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ==================== CONFIG ====================
+    const COLORS = {
+      c1: '#FFB3C1', c2: '#FF69B4', c3: '#FFCAD4',
+      c4: '#FF1493', c5: '#FFA0C9', c6: '#FFC0CB', c7: '#FF85A2',
+    };
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+
+    // ==================== MATRIX ====================
+    const matrixCanvas = document.getElementById('matrix-canvas');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    const matrixChars = "HAPPYBIRTHDAY";
+    const matrixFontSize = 11;
+    let matrixDrops = [], matrixAnimId = null;
+
+    function resizeMatrix() {
+      matrixCanvas.width = window.innerWidth;
+      matrixCanvas.height = window.innerHeight;
+      const cols = Math.floor(matrixCanvas.width / matrixFontSize);
+      matrixDrops = Array.from({length: cols}, () => Math.random() * matrixCanvas.height);
+    }
+    function drawMatrix() {
+      matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+      matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      matrixCtx.fillStyle = 'rgba(255, 179, 193, 0.45)';
+      matrixCtx.font = '900 ' + matrixFontSize + 'px "Montserrat", sans-serif';
+      for (let i = 0; i < matrixDrops.length; i++) {
+        const ch = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        const x = i * matrixFontSize, y = matrixDrops[i];
+        matrixCtx.fillText(ch, x, y);
+        if (y > matrixCanvas.height && Math.random() > 0.95) matrixDrops[i] = 0;
+        matrixDrops[i] += matrixFontSize * 0.7;
+      }
+      matrixAnimId = requestAnimationFrame(drawMatrix);
+    }
+
+    // ==================== HEARTS ====================
+    const heartEmojis = ['💙', '❤️', '🧡', '🩷'];
+    const heartColors = ['#4169E1', '#DC143C', '#FF8C00', '#FF69B4'];
+    let heartTimer = null;
+
+    function startHearts() {
+      const container = document.getElementById('heart-container');
+      if (!container) return;
+      heartTimer = setInterval(() => {
+        const h = document.createElement('div');
+        h.className = 'heart-float';
+        h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        h.style.left = (Math.random() * 95 + 2) + 'vw';
+        const size = Math.random() * 14 + 14;
+        h.style.fontSize = size + 'px';
+        h.style.animationDuration = (Math.random() * 4 + 7) + 's';
+        h.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+        container.appendChild(h);
+        setTimeout(() => { if(h.parentNode) h.parentNode.removeChild(h); }, 12000);
+      }, 280);
+    }
+    function stopHearts() {
+      if (heartTimer) clearInterval(heartTimer);
+      heartTimer = null;
+      document.querySelectorAll('.heart-float').forEach(h => {
+        if(h.parentNode) h.parentNode.removeChild(h);
+      });
+    }
+
+    // ==================== TỐI ƯU SIÊU MƯỢT PARTICLE TEXT ====================
+    const pCanvas = document.getElementById('particle-canvas');
+    const pCtx = pCanvas.getContext('2d');
+    let particles = [], pAnimId = null;
+    let mob = window.innerWidth < 768;
+
+    function resizePCanvas() {
+      pCanvas.width = window.innerWidth;
+      pCanvas.height = window.innerHeight;
+      mob = window.innerWidth < 768;
+    }
+
+    class Particle {
+      constructor(x, y, tx, ty, color, radius) {
+        this.x = x; this.y = y; this.tx = tx; this.ty = ty;
+        this.color = color;
+        this.baseR = radius; 
+        this.r = 0; 
+        this.opacity = 0;
+        this.state = 'assemble';
+        this.vx = 0;
+        this.vy = 0;
+        this.driftX = (Math.random() - 0.5) * 0.3;
+        this.driftY = (Math.random() - 0.5) * 0.3;
+      }
+      update() {
+        if (this.state === 'assemble') {
+          const dx = this.tx - this.x;
+          const dy = this.ty - this.y;
+          this.x += dx * 0.08;
+          this.y += dy * 0.08;
+          this.r += (this.baseR - this.r) * 0.15; 
+          this.opacity = Math.min(this.opacity + 0.05, 1); 
+          if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) { this.state = 'hold'; this.x = this.tx; this.y = this.ty; }
+        } else if (this.state === 'morph') {
+          this.x += this.vx; this.y += this.vy;
+          this.vx *= 0.85; this.vy *= 0.85;
+          const dx = this.tx - this.x; const dy = this.ty - this.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          this.x += dx * 0.07; this.y += dy * 0.07;
+          if (dist > 40) {
+            this.r += (this.baseR * 1.6 - this.r) * 0.2;
+            this.opacity += (0.4 - this.opacity) * 0.2;
+          } else {
+            this.r += (this.baseR - this.r) * 0.2;
+            this.opacity += (1 - this.opacity) * 0.2;
+          }
+          if (dist < 0.5 && Math.abs(this.vx) < 0.1) { this.state = 'hold'; this.x = this.tx; this.y = this.ty; this.r = this.baseR; this.opacity = 1; }
+        } else if (this.state === 'hold') {
+          this.x += this.driftX; this.y += this.driftY;
+          const dx = this.tx - this.x; const dy = this.ty - this.y;
+          this.x += dx * 0.05; this.y += dy * 0.05;
+        } else if (this.state === 'leave') {
+          this.r += 0.15; this.opacity -= 0.025; this.x += this.vx; this.y += this.vy;
+        }
+      }
+      draw() {
+        if (this.opacity <= 0.01 || this.r <= 0.1) return;
+        pCtx.save(); pCtx.globalAlpha = this.opacity; pCtx.fillStyle = this.color;
+        pCtx.beginPath(); pCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2); pCtx.fill();
+        pCtx.restore();
+      }
+    }
+
+    function calculateAdaptiveParams() {
+      const isM = mob;
+      let fontSize = isM ? 90 : 160;
+      let baseRadius = isM ? 1.8 : 2.5; 
+      let gap = isM ? 5 : 7; 
+      const maxParticles = isM ? 2000 : 3500; 
+      return { fontSize, baseRadius, gap, maxParticles };
+    }
+
+    function getTextPixels(text, fontSize, gap, w, h, limitMax) {
+      const offC = document.createElement('canvas');
+      const ctx = offC.getContext('2d');
+      offC.width = w; offC.height = h;
+      let fs = fontSize;
+      ctx.font = `900 ${fs}px "Montserrat", sans-serif`;
+      let measured = ctx.measureText(text).width;
+      const maxW = w * 0.90;
+      if (measured > maxW) { fs = Math.floor(fs * (maxW / measured)); fs = Math.max(fs, 20); }
+      ctx.font = `900 ${fs}px "Montserrat", sans-serif`;
+      ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(text, w / 2, h / 2);
+      const data = ctx.getImageData(0, 0, w, h).data;
+      const pts = [];
+      for (let y = 0; y < h; y += gap) {
+        for (let x = 0; x < w; x += gap) {
+          if (data[(y * w + x) * 4 + 3] > 100) pts.push({ x, y });
+        }
+      }
+      if (pts.length > limitMax) { pts.sort(() => Math.random() - 0.5); return pts.slice(0, limitMax); }
+      return pts;
+    }
+
+    async function spawnOrMorphParticles(text, color) {
+      try { await document.fonts.load(`900 100px "Montserrat"`); } catch(e) {}
+      const params = calculateAdaptiveParams();
+      let filteredTargets = getTextPixels(text, params.fontSize, params.gap, pCanvas.width, pCanvas.height, params.maxParticles);
+      filteredTargets.sort(() => Math.random() - 0.5);
+
+      if (particles.length === 0) {
+        for (let i = 0; i < filteredTargets.length; i++) {
+          const pt = filteredTargets[i];
+          const sx = pt.x + (Math.random() - 0.5) * 80;
+          const sy = pCanvas.height + Math.random() * 200 + 50;
+          particles.push(new Particle(sx, sy, pt.x, pt.y, color, params.baseRadius));
+        }
+      } else {
+        for (let i = 0; i < particles.length; i++) {
+          let p = particles[i];
+          if (i < filteredTargets.length) {
+            p.tx = filteredTargets[i].x; p.ty = filteredTargets[i].y; p.color = color;
+            p.state = 'morph'; p.vx = (Math.random() - 0.5) * 20; p.vy = (Math.random() - 0.5) * 20;
+          } else {
+            if (p.state !== 'leave') { p.state = 'leave'; p.vx = (Math.random() - 0.5) * 4; p.vy = (Math.random() - 0.5) * 4; }
+          }
+        }
+        for (let i = particles.length; i < filteredTargets.length; i++) {
+          const pt = filteredTargets[i];
+          const sx = pCanvas.width / 2 + (Math.random() - 0.5) * 100;
+          const sy = pCanvas.height / 2 + (Math.random() - 0.5) * 100;
+          const p = new Particle(sx, sy, pt.x, pt.y, color, params.baseRadius);
+          p.state = 'morph'; p.vx = (Math.random() - 0.5) * 20; p.vy = (Math.random() - 0.5) * 20;
+          particles.push(p);
+        }
+      }
+    }
+
+    function pAnimate() {
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update(); particles[i].draw();
+        if (particles[i].opacity <= 0) particles.splice(i, 1);
+      }
+      pAnimId = requestAnimationFrame(pAnimate);
+    }
+
+    // ==================== MAIN SEQUENCE ====================
+    async function runSequence() {
+      try {
+        resizeMatrix(); resizePCanvas(); drawMatrix(); startHearts(); pAnimate();
+
+        async function show(text, color, hold) { await spawnOrMorphParticles(text, color); await wait(hold); }
+
+        await show('3', COLORS.c1, 1400);
+        await show('2', COLORS.c2, 1400);
+        await show('1', COLORS.c4, 1400);
+        await show('HAPPY BIRTHDAY', COLORS.c2, 2200);
+        await show('TRẦN NGUYỄN CÁT TƯỜNG', COLORS.c1, 2600);
+        await show('08.05.2011', COLORS.c5, 2400);
+
+        particles.forEach(p => {
+          p.state = 'leave';
+          const dx = p.x - pCanvas.width / 2; const dy = p.y - pCanvas.height / 2;
+          const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+          p.vx = (dx / dist) * 2; p.vy = (dy / dist) * 2;
+        });
+        await wait(1200);
+
+        cancelAnimationFrame(pAnimId); cancelAnimationFrame(matrixAnimId); stopHearts(); particles = [];
+        const intro = document.getElementById('intro-screen');
+        const main = document.getElementById('main-ui');
+        if (intro) { intro.style.opacity = '0'; await wait(1200); intro.style.display = 'none'; }
+        if (main) main.classList.add('show');
+
+        initializeMainContent();
+      } catch (err) {
+        console.error('Intro error:', err);
+      }
+    }
+
+    // ==================== MAIN CONTENT & MUSIC ====================
+    function initializeMainContent() {
+      // BG Particles
+      const canvas = document.getElementById("particles-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      let bgParticles = [];
+      class BgParticle {
+        constructor() {
+          this.x = Math.random() * canvas.width; this.y = -20;
+          this.vx = (Math.random() - 0.5) * 2; this.vy = Math.random() * 2 + 1;
+          this.opacity = Math.random() * 0.5 + 0.3; this.life = 0;
+          this.size = Math.random() * 30 + 20; this.rotation = Math.random() * Math.PI * 2;
+          this.rotationSpeed = (Math.random() - 0.5) * 0.05;
+        }
+        draw() {
+          ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = "rgba(255, 152, 183, 0.9)";
+          ctx.translate(this.x, this.y); ctx.rotate(this.rotation);
+          const s = this.size / 10;
+          ctx.beginPath();
+          ctx.moveTo(0, s * 1.5);
+          ctx.bezierCurveTo(-s * 1.5, s * 0.5, -s * 2, -s * 0.5, -s * 1, -s * 1.2);
+          ctx.bezierCurveTo(-s * 0.3, -s * 1.5, 0, -s * 0.8, 0, -s * 0.2);
+          ctx.bezierCurveTo(0, -s * 0.8, s * 0.3, -s * 1.5, s * 1, -s * 1.2);
+          ctx.bezierCurveTo(s * 2, -s * 0.5, s * 1.5, s * 0.5, 0, s * 1.5);
+          ctx.fill(); ctx.restore();
+        }
+        update() {
+          this.x += this.vx; this.y += this.vy; this.life++; this.opacity -= 0.002;
+          this.rotation += this.rotationSpeed;
+          return this.life <= 400 && this.opacity > 0;
+        }
+      }
+      function animateBg() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = bgParticles.length - 1; i >= 0; i--) {
+          if (!bgParticles[i].update()) bgParticles.splice(i, 1);
+          else bgParticles[i].draw();
+        }
+        if (bgParticles.length < 80) bgParticles.push(new BgParticle());
+        requestAnimationFrame(animateBg);
+      }
+      animateBg();
+      window.addEventListener("resize", () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+
+      // Modal Logic
+      const wishBtn = document.getElementById("wish-btn");
+      const wishModal = document.getElementById("wish-modal");
+      const modalClose = document.getElementById("modal-close");
+      if (wishBtn && wishModal) { wishBtn.addEventListener("click", () => { wishModal.classList.add("active"); }); }
+      if (modalClose && wishModal) {
+        modalClose.addEventListener("click", () => { wishModal.classList.remove("active"); });
+        wishModal.addEventListener("click", (e) => { if (e.target === wishModal) wishModal.classList.remove("active"); });
+      }
+
+      // Observer cho Timeline 
+      const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.animation = "fadeInUp 0.8s ease-out forwards";
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+      document.querySelectorAll(".timeline-item").forEach((item) => { observer.observe(item); });
+    }
+
+    // Music Player Setup & Autoplay Logic
+    const audio = document.getElementById("background-music");
+    const playPauseBtn = document.getElementById("play-pause-btn");
+    const musicBtn = document.getElementById("music-btn");
+    const playerWindow = document.getElementById("music-player");
+    let isPlaying = false;
+    let rotationAngle = 0, rotationAnimId = null;
+
+    // Giả lập danh sách bài hát
+    const playlist = [
+      { name: "Happy Birthday", artist: "Special Mix", url: "music/song1.mp3", cover: "" }
+    ];
+    let currentTrack = 0;
+    if (audio) audio.src = playlist[currentTrack].url;
+
+    function startRotation() {
+      const albumArt = document.getElementById("album-art");
+      if (rotationAnimId) cancelAnimationFrame(rotationAnimId);
+      function rotate() {
+        rotationAngle += 0.5;
+        if (albumArt) albumArt.style.transform = `rotate(${rotationAngle}deg)`;
+        rotationAnimId = requestAnimationFrame(rotate);
+      }
+      rotate();
+    }
+    function stopRotation() {
+      if (rotationAnimId) { cancelAnimationFrame(rotationAnimId); rotationAnimId = null; }
+    }
+
+    function togglePlayPause() {
+      if (!audio) return;
+      if (isPlaying) {
+        audio.pause();
+        if (playPauseBtn) playPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+        isPlaying = false; stopRotation();
+      } else {
+        audio.play().then(() => {
+          if (playPauseBtn) playPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+          isPlaying = true; startRotation();
+        }).catch(e => console.log("Play prevented:", e));
+      }
+    }
+
+    // Ép khởi động phát tự động và xử lý chặn Audio từ Chrome
+    function attemptAutoPlay() {
+      if(audio) {
+        audio.volume = 0.5;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(_ => {
+            isPlaying = true;
+            if (playPauseBtn) playPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+            startRotation();
+          }).catch(error => {
+            console.log("Trình duyệt chặn Autoplay. Cần click chuột để phát nhạc!");
+          });
+        }
+      }
+    }
+
+    window.addEventListener("load", () => { attemptAutoPlay(); });
+    // Giải pháp bổ trợ: Tự động bắt phát nhạc nếu người dùng tương tác bất kỳ lần đầu vào màn hình
+    document.body.addEventListener('click', () => {
+        if(!isPlaying && audio) { attemptAutoPlay(); }
+    }, { once: true });
+
+    if (musicBtn && playerWindow) {
+      let isPlayerOpen = false;
+      musicBtn.addEventListener("click", () => {
+        isPlayerOpen = !isPlayerOpen;
+        playerWindow.classList.toggle("active", isPlayerOpen);
+      });
+      document.getElementById("close-player").addEventListener("click", () => {
+        isPlayerOpen = false; playerWindow.classList.remove("active");
+      });
+    }
+
+    if (playPauseBtn) playPauseBtn.addEventListener("click", togglePlayPause);
+    
+    // ==================== INIT ====================
+    window.addEventListener('resize', () => { resizeMatrix(); resizePCanvas(); });
+
+    if (document.fonts) {
+      async function start() {
+        await document.fonts.ready;
+        await new Promise(r => setTimeout(r, 300));
+        runSequence();
+      }
+      start();
+    } else {
+      window.addEventListener('load', runSequence);
+    }
+  })();
+  </script>
+</body>
+</html>
